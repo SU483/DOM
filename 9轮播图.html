@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>轮播图</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        li{
+            list-style: none;
+        }
+
+        #container{
+            position: relative;
+            width: 820px;
+            height: 340px;
+            margin: 100px auto;
+        }
+
+        #imgs img{
+            display: none;
+        }
+        #imgs .selected{
+            display: block;
+        }
+
+        #nav{
+            position: absolute;
+            right:10px;
+            bottom: 10px;
+
+        }
+
+        #nav li,#arrows span{
+            width: 20px;
+            height: 20px;
+            background: #000;
+            color: white;
+            float: left;
+            margin-right: 5px;
+            text-align: center;
+            line-height: 20px;
+            cursor: pointer;
+        }
+
+        #nav .nav-selected{
+            background: gold;
+        }
+
+        #arrows{
+            position: absolute;
+            left:10px;
+            bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="imgs">
+            <img src="zhanlingjie.jpeg" alt="" class="selected" >
+            <a href="https://lol.qq.com/act/a20200723spiritblossom/index.html?e_code=500131"><img src="lpl.jpeg" alt=""></a>
+            <!--<img src="lpl.jpeg" alt="">-->
+            <img src="tonxingzheng.jpeg" alt="">
+            <img src="linghunlianhua.jpeg" alt="">
+        </div>
+        <ul id="nav">
+            <li class="nav-selected">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>
+        <div id="arrows">
+            <span id="prev">&lt;</span>
+            <span id="next">&gt;</span>
+        </div>
+    </div>
+    <script>
+        var oImgs=document.getElementById('imgs');
+        var aImg=oImgs.getElementsByTagName('img');
+        var oNav=document.getElementById('nav');
+        var aLi=oNav.getElementsByTagName('li');
+        var oPrev=document.getElementById('prev');
+        var oNext=document.getElementById('next');
+        var oContainer=document.getElementById('container');
+        var iNowIndex=0;//全局变量，保存的是当前现实图片的索引
+        var timer;
+
+        //定义方法changeImage，改变图标和图画
+        function changeImage(){
+            for(var i=0;i<aLi.length;i++){
+                aLi[i].className='';
+                aImg[i].className='';
+            }
+            aLi[iNowIndex].className='nav-selected';
+            aImg[iNowIndex].className='selected';
+        }
+        //定义方法play，用来播放下一个图片
+        function play () {
+            timer=setInterval(function () {
+                oNext.onclick();
+            },1000);
+        }
+
+
+
+        for(var i=0;i<aLi.length;i++){
+            aLi[i].index=i;
+            aLi[i].onmouseover=function () {
+                iNowIndex=this.index;
+                /*for(var j=0;j<aLi.length;j++){
+                    aLi[j].className='';
+                    aImg[j].className='';
+                }
+                this.className='nav-selected';
+                aImg[this.index].className='selected';*/
+                changeImage();
+            };
+        }
+
+        oPrev.onclick=function () {
+            iNowIndex--;
+            if(iNowIndex==-1){
+                iNowIndex=aLi.length-1;
+            }
+            /*for(var i=0;i<aLi.length;i++){
+                aLi[i].className='';
+                aImg[i].className='';
+            }
+            aLi[iNowIndex].className='nav-selected';
+            aImg[iNowIndex].className='selected';*/
+            changeImage();
+        };
+        oNext.onclick=function () {
+            iNowIndex++;
+            if(iNowIndex==4){
+                iNowIndex=0;
+            }
+            /*for(var i=0;i<aLi.length;i++){
+                aLi[i].className='';
+                aImg[i].className='';
+            }
+            aLi[iNowIndex].className='nav-selected';
+            aImg[iNowIndex].className='selected';*/
+            changeImage();
+        };
+
+        //清除<,>的浏览器默认行为
+        oPrev.onselectstart=oNext.onselectstart=function(){
+            return false;
+        };
+        //清除1，2，3，4的浏览器默认行为
+        oNav.onselectstart=function(){
+            return false;
+        };
+
+        play();
+        oContainer.onmouseover=function(){
+            clearInterval(timer);
+        };
+        oContainer.onmouseout=function(){
+            play();
+        };
+
+
+
+    </script>
+</body>
+</html>
